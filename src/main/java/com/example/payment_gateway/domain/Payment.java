@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.example.payment_gateway.api.dto.CreatePaymentRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,6 +50,17 @@ public class Payment {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
+
+    public static Payment create(CreatePaymentRequest request) {
+        return Payment.builder()
+                .id(UUID.randomUUID())
+                .amount(request.amount())
+                .currency(request.currency().toUpperCase())
+                .customerId(request.customerId())
+                .status(PaymentStatus.CREATED)
+                .createdAt(Instant.now())
+                .build();
+    }
 
 }
 
